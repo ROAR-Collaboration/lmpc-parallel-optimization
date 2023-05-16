@@ -49,6 +49,24 @@ Design model predictive control with control barrier functions for obstacle avoi
 
 ## Features
 
+original structure of the project from the paper:
+ <img src="/media/image/structure-Packages.drawio.png" width="800"/>
+
+Current project structure after refactoring (discard ROS1 dependency and moved the planner and combine the controller together with the planner):
+ <img src="/media/image/drawio.png" width="800"/>
+
+the controllers and planners work together to control the ego vehicle and help it navigate through the track with other vehicles. The relationship between the controllers and planners can be better understood in the context of the LMPCRacingGame class.
+
+The LMPCRacingGame class is a controller that inherits from the LMPC class. It extends the functionality of the LMPC controller by incorporating additional racing game constraints and logic, such as collision avoidance with other vehicles, overtaking, and managing the positions of the vehicles on the track.
+
+The planners are used within the LMPCRacingGame class to plan the trajectory and determine the optimal control inputs for the ego vehicle. The RacingGameParam class is used to store the planning parameters, such as the time horizon and the planning prediction factor. The LMPCRacingGame class uses these parameters to generate safe and efficient trajectories for the ego vehicle while considering the positions and velocities of other vehicles on the track.
+
+In summary, the controllers are responsible for determining the control inputs for the ego vehicle based on the current state and desired trajectory, while the planners are used to generate the desired trajectory by considering the environment, including other vehicles and track constraints. The LMPCRacingGame class combines the functionality of both the controller and planner to enable the ego vehicle to navigate through the track while avoiding collisions and overtaking other vehicles.
+
+the simulator has noise in the dynamics of the ego vehicle. This noise is added by default when updating the vehicle's state in the OffboardDynamicBicycleModel class. The noise is added to the longitudinal acceleration and yaw rate in the `_update_dynamics()` method of the class.
+
+However, there is an option to remove this noise by using the `--zero-noise` argument when running the script. When this argument is passed, the `set_zero_noise()` method is called on the ego vehicle, which sets the noise standard deviations for acceleration and yaw rate to zero. This effectively removes the noise from the ego vehicle's dynamics during the simulation.
+
 ## Installation
 * We recommend creating a new conda environment:
 ```
